@@ -12,6 +12,9 @@ by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit h
 #include "resource_dir.h"
 #include "World.h"
 #include "Random.h"
+#include "Pointaffector.h"
+#include "gravitation_effector.h"
+#include <string>
 
 int main()
 {
@@ -22,8 +25,15 @@ int main()
     SearchAndSetResourceDir("resources");
 
     Texture wabbit = LoadTexture("wabbit_alpha.png");
+
+    //SetTargetFPS(10);
     World world;
 
+    world.AddAffector(new PointEffector(Vector2{ 200,200 }, 100, 30000.0f));
+    world.AddAffector(new PointEffector(Vector2{ 600,600 }, 100, 1000.0f));
+	world.AddAffector(new GravitationalEffector(100000.0f));
+    float timeAccum = 0.0f;
+    float fixedTimeStep = 1.0f / 60.0f; //0.016 * 60.0 =1.0
     // Game loop
     while (!WindowShouldClose())
     {
@@ -35,7 +45,9 @@ int main()
             (IsKeyDown(KEY_LEFT_CONTROL) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)))
         {
             Body body;
-            body.position = mousePos;
+
+			body.bodyType = (IsKeyDown(KEY_LEFT_ALT)) ? Bodytype::Static : Bodytype::Dynamic;
+            body.position = GetMousePosition();
 
             float angle = GetRandomFloat() * (2 * PI);
             Vector2 direction = { cosf(angle), sinf(angle) };
@@ -45,10 +57,25 @@ int main()
             body.size = GetRandomFloat(5.0f, 25.0f);
             body.restitution = GetRandomFloat(0.5f, 1.0f);
             body.mass = 1.0f;
+			body.inverseMass = (body.bodyType == Bodytype::Dynamic) ? 1.0f / body.mass : 0.0f;
+            body.gravityScale = 1.0f;
+            body.damping = 1.0f;
+			body.mass = body.size; // Mass proportional to size for more realistic physics
 
             world.AddBody(body);
         }
 
+        timeAccum += dt;
+        while (timeAccum > fixedTimeStep) {
+            world.Step(dt);
+            timeAccum -= fixedTimeStep;
+        }
+
+
+        std::string fpsText = "FPS: ";
+        fpsText += std::to_string(GetFPS());
+
+        DrawText(fpsText.c_str(), 100, 100, 20, GREEN);
         // Input handling - Mouse attractor
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
         {
@@ -65,16 +92,17 @@ int main()
 
         // Update
         world.Step(dt);
+       
 
         // Draw
         BeginDrawing();
         ClearBackground(BLACK);
 
-        DrawText("Hello Raylib", 200, 200, 20, WHITE);
-        DrawTexture(wabbit, 400, 200, WHITE);
+        //DrawText("Hello Raylib", 200, 200, 20, WHITE);
+        //DrawTexture(wabbit, 400, 200, WHITE);
 
         world.Draw();
-
+       
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
         {
             DrawCircleLinesV(mousePos, 100, WHITE);

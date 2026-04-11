@@ -27,6 +27,21 @@
     <ClInclude Include="src\Random.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\integrator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Affector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pointaffector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gravitation_effector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -36,6 +51,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Body.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pointaffector.cpp" />
+    <ClCompile Include="src\collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gravitation_effector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
