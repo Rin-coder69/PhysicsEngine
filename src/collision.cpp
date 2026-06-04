@@ -44,33 +44,37 @@ void SeparateContacts(std::vector<Contact>& contacts)
 	for (auto& contact : contacts) {
 		float totalInverseMass = contact.bodyA->inverseMass + contact.bodyB->inverseMass;
 		Vector2 separation = contact.normal * (contact.depth / totalInverseMass);
-		contact.bodyA->position = contact.bodyA->position -(separation * contact.bodyA->inverseMass);
-		contact.bodyB->position = contact.bodyB->position + (separation * contact.bodyB->inverseMass);
+		contact.bodyA->position = contact.bodyA->position +(separation * contact.bodyA->inverseMass);
+		contact.bodyB->position = contact.bodyB->position - (separation * contact.bodyB->inverseMass);
 	}
 }
 
 void ResolveContacts(std::vector<Contact>& contacts)
 {
-    for (auto& contact : contacts)
-    {
-        // compute relative velocity
-        Vector2 rv = contact.bodyA->Velocity - contact.bodyB->Velocity;
-        // project relative velocity onto the contact normal
-        float nv = Vector2DotProduct(rv, contact.normal);
+	for (auto& contact : contacts)
+	{
+		// compute relative velocity
+		Vector2 rv = contact.bodyA->velocity - contact.bodyB->velocity;
+		// project relative velocity onto the contact normal
+		float nv = Vector2DotProduct(rv, contact.normal);
 
-        // skip if bodies are separating
-        if (nv > 0) continue;
+		// skip if bodies are separating
+		if (nv > 0) continue;
 
-        // total inverse mass = (1/mA + 1/mB)
-        float totalInverseMass = contact.bodyA->inverseMass + contact.bodyB->inverseMass;
-        // impulse scalar = -(1 + restitution) * vn / (1/mA + 1/mB)
-        float impulseMagnitude = -(1 + contact.restitution) * nv / totalInverseMass;
+		// total inverse mass = (1/mA + 1/mB)
+		float totalInverseMass = contact.bodyA->inverseMass + contact.bodyB->inverseMass;
+		// impulse scalar = -(1 + restitution) * vn / (1/mA + 1/mB)
+		float impulseMagnitude = -(1 + contact.restitution) * nv / totalInverseMass;
 
-        // impulse vector along contact normal
-        Vector2 impulse = Vector2Scale(contact.normal, impulseMagnitude);
+		// impulse vector along contact normal
+		Vector2 impulse = Vector2Scale(contact.normal, impulseMagnitude);
 
-        // apply equal and opposite impulses
-        contact.bodyA->AddForce(impulse, ForceMode::Impulse);
-        contact.bodyB->AddForce(Vector2Negate(impulse), ForceMode::Impulse);
-    }
+		// apply equal and opposite impulses
+		contact.bodyA->AddForce(impulse, ForceMode::Impulse);
+		contact.bodyB->AddForce(Vector2Negate(impulse), ForceMode::Impulse);
+	}
 }
+
+
+
+

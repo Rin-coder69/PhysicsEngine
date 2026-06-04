@@ -2,14 +2,14 @@
 
 // Semi-Explicit Euler Integration (Symplectic Euler)
 void Body::Step(float dt) {
-    Velocity += acceleration * dt;
-    position += Velocity * dt;
+    velocity += acceleration * dt;
+    position += velocity * dt;
     acceleration = { 0, 0 };
 }
 
 // Draw the body as a circle
 void Body::Draw() const {
-    DrawCircleV(position, size, RED);
+    DrawCircleV(position, size, color);
     DrawCircleLinesV(position, size, WHITE);
 }
 
@@ -22,12 +22,12 @@ void Body::AddForce(Vector2 force, ForceMode forceMode) {
             force = force * inverseMass; // F = ma -> a = F/m
             break;
         case ForceMode::Impulse:
-			Velocity += force * inverseMass; // Impulse
+            velocity += force * inverseMass; // Impulse
             break;
         case ForceMode::Acceleration:
             break;
         case ForceMode::VelocityChange:
-			Velocity += force; // Directly change velocity
+            velocity += force; // Directly change velocity
             break;
         default:
             break;
