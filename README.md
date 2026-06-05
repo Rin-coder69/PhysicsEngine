@@ -5,8 +5,8 @@ A lightweight, interactive 2D physics simulation built with [raylib](https://www
 ---
  
 ## 📸 Preview
- 
-> *(Add a screenshot or GIF of the simulation here)*
+ <img width="1911" height="1236" alt="image" src="https://github.com/user-attachments/assets/eac37cb9-63ac-4b32-8d4f-f8da1e039477" />
+
  
 ---
  
@@ -64,6 +64,11 @@ Springs connect two circles and exert forces to maintain a rest length. They can
 ---
  
 ## 🖥️ GUI Reference
+
+
+
+<img width="484" height="1030" alt="image" src="https://github.com/user-attachments/assets/bdb2e559-e8fc-4c86-b747-df8e26d390f1" />
+
  
 The **Physics Controls** panel lets you configure all properties before and during the simulation.
  
